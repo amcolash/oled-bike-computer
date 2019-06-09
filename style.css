@@ -1,12 +1,38 @@
 body {
   margin: 0;
-  padding: 1em;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
   background-color: black;
   color: white;
+  font-family: sans-serif;
+  text-align: center;
 }
 
 select {
   margin-right: 1em;
+}
+
+.hidden {
+  display: none;
+}
+
+#settingsIcon {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  cursor: pointer;
+}
+
+#settings {
+  position: absolute;
+  top: 1em;
+}
+
+#stats {
+  font-size: 3.5em;
+  line-height: 1.75em;
 }
 
 #log {

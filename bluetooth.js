@@ -15,9 +15,10 @@ var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothSta
 var wheelSize = 2111;
 
 window.onload = () => {
-    if (logElement) {
-        updateWheel();
-    }
+    loadSettings();
+    saveSettings();
+
+    updateWheel();
     feather.replace();
 
     if (simulate) {
@@ -30,19 +31,34 @@ function setIntervalImmediately(callback, time) {
     setInterval(callback, time);
 }
 
-function updateWheel() {
-    var rimElement = document.getElementById("rim");
-    var tireElement = document.getElementById("tire");
-    var mmElement = document.getElementById("mm");
+function toggleSettings() {
+    settings.classList.toggle("hidden");
+}
 
-    var r = parseFloat(rimElement.value);
-    var t = parseFloat(tireElement.value);
+function loadSettings() {
+    rim.value = localStorage.getItem('rim') || rim.value;
+    tire.value = localStorage.getItem('tire') || tire.value;
+    mm.value = localStorage.getItem('mm') || mm.value;
+    metric.checked = (localStorage.hasOwnProperty('metric') ? JSON.parse(localStorage.getItem('metric')) : metric.checked);
+}
+
+function saveSettings() {
+    localStorage.setItem('rim', rim.value);
+    localStorage.setItem('tire', tire.value);
+    localStorage.setItem('mm', mm.value);
+    localStorage.setItem('metric', metric.checked);
+}
+
+function updateWheel() {
+    var r = parseFloat(rim.value);
+    var t = parseFloat(tire.value);
     if (r > 0 && t > 0) {
         wheelSize = Math.PI * (2 * t + r);
-        mmElement.value = Math.round(wheelSize);
+        mm.value = Math.round(wheelSize);
     } else {
-        mmElement.value = '';
+        mm.value = '';
     }
+    saveSettings();
 }
 
 function handleButton() {
@@ -180,11 +196,17 @@ function handleNotifications(event) {
     // console.log(bluetoothStats);
 
     calculateStats();
-    
+
     if (bluetoothStats) {
-        var data = "Cadence (rpm): " + bluetoothStats.cadence.toFixed(1) + "\n";
-        data += "Distance (km): " + bluetoothStats.distance.toFixed(2) + "\n";
-        data += "Speed (km/hr): " + bluetoothStats.speed.toFixed(1);
+        if (metric.checked) {
+            data = bluetoothStats.speed.toFixed(1) + " km/hr\n";
+            data += bluetoothStats.distance.toFixed(2) + " km\n";
+        } else {
+            data = (bluetoothStats.speed * 0.621371).toFixed(1) + " mi/hr\n";
+            data += (bluetoothStats.distance * 0.621371).toFixed(2) + " mi\n";
+        }
+        data += bluetoothStats.cadence.toFixed(1) + " rpm";
+
         stats.innerText = data;
     }
 }
