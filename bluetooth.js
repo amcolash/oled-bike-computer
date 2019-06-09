@@ -21,6 +21,8 @@ window.onload = () => {
     feather.replace();
 
     if (simulate) {
+        // call a few times and repeat so ui is updated immediately
+        handleNotifications();
         setIntervalImmediately(handleNotifications, 1000);
     }
 }
