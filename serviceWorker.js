@@ -8,6 +8,9 @@ self.addEventListener('install', function(evt) {
 
   // Ask the service worker to keep installing until the returning promise resolves.
   evt.waitUntil(precache());
+
+  // clean old service worker caches
+  evt.waitUntil(cleanup());
 });
 
 // On fetch, use cache but update the entry with the latest contents from the server.
@@ -49,5 +52,19 @@ function update(request) {
     return fetch(request).then(function (response) {
       return cache.put(request, response);
     });
+  });
+}
+
+// Wipe no longer useful caches
+function cleanup() {
+  return caches.keys().then(cacheNames => {
+      return Promise.all(
+          cacheNames.filter(cacheName => {
+              return cacheName !== CACHE;
+          }).map(cacheName => {
+              console.log("Deleting old service worker cache", cacheName);
+              return caches.delete(cacheName);
+          })
+      );
   });
 }
