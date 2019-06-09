@@ -1,5 +1,6 @@
 // from https://serviceworke.rs/strategy-cache-and-update_service-worker_doc.html
 var CACHE = 'cache-and-update';
+var SCOPE = self.registration.scope;
 
 // On install, cache some resources.
 self.addEventListener('install', function(evt) {
@@ -24,10 +25,11 @@ self.addEventListener('fetch', function(evt) {
 function precache() {
   return caches.open(CACHE).then(function (cache) {
     return cache.addAll([
-      '/index.html',
-      '/bluetooth.js',
-      '/style.css',
-      '/feather.min.js'
+      SCOPE,
+      SCOPE + '/index.html',
+      SCOPE + '/bluetooth.js',
+      SCOPE + '/style.css',
+      SCOPE + '/feather.min.js'
     ]);
   });
 }

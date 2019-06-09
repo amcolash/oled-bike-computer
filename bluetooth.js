@@ -26,7 +26,7 @@ window.onload = () => {
 
     if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('serviceWorker.js', {
-            scope: '/'
+            scope: window.location.pathname
         });
     }
 }
