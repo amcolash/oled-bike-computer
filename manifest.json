@@ -43,8 +43,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/oled-bike-computer/index.html",
   "orientation": "portrait",
   "display": "standalone",
   "theme_color": "#000000",
