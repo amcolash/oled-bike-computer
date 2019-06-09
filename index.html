@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bluetooth Test</title>
 
-    <link rel="stylesheet" href="css/pure-min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family: sans-serif; padding: 1em;">
-    <form class="pure-form">
+<body>
+    <form>
         <fieldset>
             <label for="rim">Rim</label>
-            <select id="rim" name="rim" onchange="updateWheel();" style="margin-right: 10px;">
+            <select id="rim" name="rim" onchange="updateWheel();">
                 <option value="203">12.5"</option>
                 <option value="305">16"</option>
                 <option value="406">20"</option>
@@ -35,7 +35,7 @@
             </select>
 
             <label for="tire">Tire</label>
-            <select id="tire" name="tire" onchange="updateWheel();" style="margin-right: 10px;">
+            <select id="tire" name="tire" onchange="updateWheel();">
                 <option value="18">18C</option>
                 <option value="19">19C</option>
                 <option value="20">20C</option>
@@ -91,13 +91,13 @@
 
     <hr>
 
-    <button class="pure-button" id="connect">Connect</button>
+    <button id="connect">Connect</button>
 
-    <div id="bluetoothInfo" style="display: none;">
+    <div id="bluetoothInfo">
         <h2>Stats</h2>
         <div id="stats"></div>
         <hr>
-        <div id="log" style="padding: 10px; margin: 10px;"></div>
+        <div id="log"></div>
     </div>
 
     <script src="feather.min.js"></script>

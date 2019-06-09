@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 1em;
+  background-color: black;
+  color: white;
+}
+
+select {
+  margin-right: 1em;
+}
+
+#log {
+  padding: 1em;
+  margin: 1em;
+}

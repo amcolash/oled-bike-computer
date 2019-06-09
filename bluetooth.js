@@ -3,6 +3,8 @@ var bluetoothInfo = document.getElementById("bluetoothInfo");
 var stats = document.getElementById("stats");
 var logElement = document.getElementById("log");
 
+const simulate = true;
+
 connectButton.addEventListener('click', handleButton);
 
 const UINT16_MAX = 65536;  // 2^16
@@ -12,8 +14,20 @@ const updateRatio = 0.85; // Percent ratio between old/new stats
 var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance;
 var wheelSize = 2111;
 
-if (logElement) {
-  window.onload = updateWheel;
+window.onload = () => {
+    if (logElement) {
+        updateWheel();
+    }
+    feather.replace();
+
+    if (simulate) {
+        setIntervalImmediately(handleNotifications, 1000);
+    }
+}
+
+function setIntervalImmediately(callback, time) {
+    callback();
+    setInterval(callback, time);
 }
 
 function updateWheel() {
@@ -24,7 +38,7 @@ function updateWheel() {
     var r = parseFloat(rimElement.value);
     var t = parseFloat(tireElement.value);
     if (r > 0 && t > 0) {
-        wheelSize = 3.1415 * (2 * t + r);
+        wheelSize = Math.PI * (2 * t + r);
         mmElement.value = Math.round(wheelSize);
     } else {
         mmElement.value = '';
@@ -39,7 +53,6 @@ function handleButton() {
     navigator.bluetooth.requestDevice({filters: [{services: [serviceUuid]}]})
     // navigator.bluetooth.requestDevice({acceptAllDevices: true})
         .then(device => {
-            if (bluetoothInfo) bluetoothInfo.style.display = "block";
             bluetoothDevice = device;
             bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
             return connect();
@@ -132,19 +145,32 @@ function log(message) {
 }
 
 function handleNotifications(event) {
-    let value = event.target.value;
-
-    let flags = value.getUint8(0, true);
-    hasWheel = flags === 1 || flags === 3;
-    hasCrank = flags === 2 || flags === 3;
-
     previousSample = currentSample;
-    currentSample = {
-        wheel: value.getUint32(1, true),
-        wheelTime: value.getUint16(5, true),
-        crank: value.getUint16(7, true),
-        crankTime: value.getUint16(9, true),
-    };
+
+    if (!simulate) {
+        const value = event.target.value;
+    
+        const flags = value.getUint8(0, true);
+        hasWheel = flags === 1 || flags === 3;
+        hasCrank = flags === 2 || flags === 3;
+    
+        currentSample = {
+            wheel: value.getUint32(1, true),
+            wheelTime: value.getUint16(5, true),
+            crank: value.getUint16(7, true),
+            crankTime: value.getUint16(9, true),
+        };
+    } else {
+        hasWheel = true;
+        hasCrank = true;
+        currentSample = {
+            wheel: (previousSample ? previousSample.wheel : 0) + 2 + Math.random() * 0.5,
+            wheelTime: (previousSample ? previousSample.wheelTime : 0) + 1000,
+            crank: (previousSample ? previousSample.crank : 0) + 1 + Math.random() * 0.25,
+            crankTime: (previousSample ? previousSample.crankTime : 0) + 1000
+        }
+    }
+
 
     // console.log(previousSample, currentSample);
     // var bluetoothStats = "Wheel Rev: " + currentSample.wheel + "\n";
@@ -152,9 +178,9 @@ function handleNotifications(event) {
     // bluetoothStats += "Crank Rev: " + currentSample.crank + "\n";
     // bluetoothStats += "Last Crank Time: " + currentSample.crankTime;
     // console.log(bluetoothStats);
-    
-    calculateStats();
 
+    calculateStats();
+    
     if (bluetoothStats) {
         var data = "Cadence (rpm): " + bluetoothStats.cadence.toFixed(1) + "\n";
         data += "Distance (km): " + bluetoothStats.distance.toFixed(2) + "\n";
