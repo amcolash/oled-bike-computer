@@ -1,6 +1,4 @@
 var connectButton = document.getElementById("connectButton");
-connectButton.addEventListener('click', handleButton);
-
 var bluetoothInfo = document.getElementById("bluetoothInfo");
 var stats = document.getElementById("stats");
 var logElement = document.getElementById("log");

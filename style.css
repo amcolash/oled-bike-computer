@@ -11,17 +11,20 @@ body {
   user-select: none;
 }
 
-select {
-  margin-right: 1em;
+input, select {
+  border-radius: 0.25em;
+  padding: 0.25em;
+  background-color: white;
+}
+
+label {
+  padding-right: 0.25em;
 }
 
 #connectButton {
   position: absolute;
   top: 1em;
   left: 1em;
-  background-color: transparent;
-  border: none;
-  color: white;
 }
 
 #settings.hidden {
@@ -32,6 +35,14 @@ select {
   position: absolute;
   top: 1em;
   right: 1em;
+}
+
+.button {
+  color: white;
+  background-color: #1a1a1a;
+  padding: 0.5em;
+  line-height: 0.7em;
+  border-radius: 0.5em;
   cursor: pointer;
 }
 
@@ -39,12 +50,12 @@ select {
   position: absolute;
   top: 1em;
   transition: top 0.3s;
-  line-height: 1.6em;
+  line-height: 2em;
 }
 
 #stats {
-  font-size: 3.5em;
-  line-height: 1.75em;
+  font-size: 3em;
+  line-height: 1.5em;
 }
 
 #log {

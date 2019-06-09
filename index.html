@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="settingsIcon" onclick="toggleSettings()">
+    <div id="settingsIcon" class="button" onclick="toggleSettings()">
         <i data-feather="settings"></i>
     </div>
 
@@ -97,9 +97,9 @@
         <input type="checkbox" name="metric" id="metric" checked onchange="saveSettings()">
     </form>
 
-    <button id="connectButton">
+    <div id="connectButton" class="button" onclick="handleButton()">
         <i data-feather="zap-off"></i>
-    </button>
+    </div>
 
     <div id="bluetoothInfo">
         <!-- <h2>Stats</h2> -->
