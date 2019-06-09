@@ -5,13 +5,11 @@ var logElement = document.getElementById("log");
 
 const simulate = true;
 
-
 const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 const updateRatio = 0.85; // Percent ratio between old/new stats
 
-var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance;
-var wheelSize = 2111;
+var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize;
 
 window.onload = () => {
     loadSettings();
@@ -24,6 +22,12 @@ window.onload = () => {
         // call a few times and repeat so ui is updated immediately
         handleNotifications();
         setIntervalImmediately(handleNotifications, 1000);
+    }
+
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('serviceWorker.js', {
+            scope: '/'
+        });
     }
 }
 
