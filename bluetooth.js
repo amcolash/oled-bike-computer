@@ -1,11 +1,12 @@
-var connectButton = document.getElementById("connect");
+var connectButton = document.getElementById("connectButton");
+connectButton.addEventListener('click', handleButton);
+
 var bluetoothInfo = document.getElementById("bluetoothInfo");
 var stats = document.getElementById("stats");
 var logElement = document.getElementById("log");
 
 const simulate = true;
 
-connectButton.addEventListener('click', handleButton);
 
 const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
@@ -86,6 +87,8 @@ function handleButton() {
             return characteristic.startNotifications().then(_ => {
                 log('Notifications started');
                 characteristic.addEventListener('characteristicvaluechanged', handleNotifications);
+                connectButton.innerHTML = '<i data-feather="zap"></i>';
+                feather.replace();
             });
         })
         .catch(error => {
@@ -96,6 +99,8 @@ function handleButton() {
 
 function cleanup() {
     log('Cleaning up');
+    connectButton.innerHTML = '<i data-feather="zap-off"></i>';
+    feather.replace();
     if (bluetoothDevice) {
         bluetoothDevice.removeEventListener('gattserverdisconnected', onDisconnected);
         bluetoothDevice = undefined;

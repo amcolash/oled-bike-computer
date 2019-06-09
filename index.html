@@ -35,6 +35,7 @@
             <option value="622" selected="selected">700 / 29er</option>
             <option value="630">27 inch</option>
         </select>
+        <br>
         
         <label for="tire">Tire</label>
         <select id="tire" name="tire" onchange="updateWheel();">
@@ -86,17 +87,20 @@
             <option value="99.06">3.9 inch</option>
             <option value="101.6">4.0 inch</option>
         </select>
+        <br>
+
         <label for="mm">Wheel mm</label>
         <input name="mm" id="mm" size="5" readonly>
-
         <br>
 
         <label for="metric">Metric</label>
         <input type="checkbox" name="metric" id="metric" checked onchange="saveSettings()">
-
-        <button id="connect">Connect</button>
     </form>
-    
+
+    <button id="connectButton">
+        <i data-feather="zap-off"></i>
+    </button>
+
     <div id="bluetoothInfo">
         <!-- <h2>Stats</h2> -->
         <div id="stats"></div>

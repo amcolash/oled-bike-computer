@@ -8,14 +8,24 @@ body {
   color: white;
   font-family: sans-serif;
   text-align: center;
+  user-select: none;
 }
 
 select {
   margin-right: 1em;
 }
 
-.hidden {
-  display: none;
+#connectButton {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+#settings.hidden {
+  top: -8em;
 }
 
 #settingsIcon {
@@ -28,6 +38,8 @@ select {
 #settings {
   position: absolute;
   top: 1em;
+  transition: top 0.3s;
+  line-height: 1.6em;
 }
 
 #stats {
