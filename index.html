@@ -98,13 +98,12 @@
         <label for="mm">Wheel mm</label>
         <input name="mm" id="mm" size="5" readonly>
         <br>
-        
+
         <label for="simulateCheckbox">Simulate</label>
         <input type="checkbox" name="simulateCheckbox" id="simulateCheckbox" checked onchange="updateSimulate()">
         
         <label for="metric">Metric</label>
         <input type="checkbox" name="metric" id="metric" checked onchange="saveSettings()">
-        
     </form>
 
     <div id="connectButton" class="button" onclick="handleButton()">
@@ -116,6 +115,8 @@
         <div id="stats"></div>
         <!-- <div id="log"></div> -->
     </div>
+
+    <div id="time"></div>
     
     <script src="feather.min.js"></script>
     <script src="bluetooth.js"></script>

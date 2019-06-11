@@ -58,6 +58,12 @@ label {
   line-height: 1.5em;
 }
 
+#time {
+  position: absolute;
+  bottom: 1em;
+  font-size: 2em;
+}
+
 #log {
   padding: 1em;
   margin: 1em;
