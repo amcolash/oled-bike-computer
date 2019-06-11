@@ -98,9 +98,13 @@
         <label for="mm">Wheel mm</label>
         <input name="mm" id="mm" size="5" readonly>
         <br>
-
+        
+        <label for="simulateCheckbox">Simulate</label>
+        <input type="checkbox" name="simulateCheckbox" id="simulateCheckbox" checked onchange="updateSimulate()">
+        
         <label for="metric">Metric</label>
         <input type="checkbox" name="metric" id="metric" checked onchange="saveSettings()">
+        
     </form>
 
     <div id="connectButton" class="button" onclick="handleButton()">

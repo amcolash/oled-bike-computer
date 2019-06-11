@@ -3,12 +3,11 @@ var bluetoothInfo = document.getElementById("bluetoothInfo");
 var stats = document.getElementById("stats");
 var logElement = document.getElementById("log");
 
-const simulate = true;
-
 const UINT16_MAX = 65536;  // 2^16
 const UINT32_MAX = 4294967296;  // 2^32
 const updateRatio = 0.85; // Percent ratio between old/new stats
 
+var simulate = true;
 var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize;
 
 window.onload = () => {
@@ -17,6 +16,8 @@ window.onload = () => {
 
     updateWheel();
     feather.replace();
+
+    stats.innerText = metric.checked ? "0.0 km/hr\n0.00 km\n0.0 rpm" : "0.0 mi/hr\n0.00 mi\n0.0 rpm";
 
     if (simulate) {
         // call a few times and repeat so ui is updated immediately
@@ -45,6 +46,8 @@ function loadSettings() {
     tire.value = localStorage.getItem('tire') || tire.value;
     mm.value = localStorage.getItem('mm') || mm.value;
     metric.checked = (localStorage.hasOwnProperty('metric') ? JSON.parse(localStorage.getItem('metric')) : metric.checked);
+    simulate = (localStorage.hasOwnProperty('simulate') ? JSON.parse(localStorage.getItem('simulate')) : simulateCheckbox.checked);
+    simulateCheckbox.checked = simulate;
 }
 
 function saveSettings() {
@@ -52,6 +55,12 @@ function saveSettings() {
     localStorage.setItem('tire', tire.value);
     localStorage.setItem('mm', mm.value);
     localStorage.setItem('metric', metric.checked);
+    localStorage.setItem('simulate', simulateCheckbox.checked);
+}
+
+function updateSimulate() {
+    saveSettings();
+    window.location.reload();
 }
 
 function updateWheel() {
