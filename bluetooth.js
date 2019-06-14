@@ -11,8 +11,8 @@ const updateRatio = 0.85; // Percent ratio between old/new stats
 const serviceUuid = "cycling_speed_and_cadence";
 const characteristicUuid = "csc_measurement";
 
-var simulate = true;
-var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize;
+var simulate = true, duration = 0;
+var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize, lastUpdate;
 
 window.onload = () => {
     loadSettings();
@@ -136,6 +136,8 @@ function cleanup() {
         bluetoothDevice.removeEventListener('gattserverdisconnected', onDisconnected);
         bluetoothDevice = undefined;
     }
+
+    lastUpdate = undefined;
     
     if (characteristic) {
         characteristic.stopNotifications()
@@ -191,6 +193,7 @@ function connect() {
     
     function onDisconnected() {
         console.log('Bluetooth Device disconnected');
+        lastUpdate = undefined;
         connect();
     }
     
@@ -237,7 +240,6 @@ function connect() {
             }
         }
         
-        
         // console.log(previousSample, currentSample);
         // var bluetoothStats = "Wheel Rev: " + currentSample.wheel + "\n";
         // bluetoothStats += "Last Wheel Time: " + currentSample.wheelTime + "\n";
@@ -246,8 +248,14 @@ function connect() {
         // console.log(bluetoothStats);
         
         calculateStats();
-        
+
         if (bluetoothStats) {
+            if (bluetoothStats.speed > 0) {
+                if (!lastUpdate) lastUpdate = new Date();
+                duration += (new Date() - lastUpdate);
+                lastUpdate = new Date();
+            }
+
             if (metric.checked) {
                 data = bluetoothStats.speed.toFixed(1) + " km/hr\n";
                 data += bluetoothStats.distance.toFixed(2) + " km\n";
@@ -255,11 +263,24 @@ function connect() {
                 data = (bluetoothStats.speed * 0.621371).toFixed(1) + " mi/hr\n";
                 data += (bluetoothStats.distance * 0.621371).toFixed(2) + " mi\n";
             }
-            data += bluetoothStats.cadence.toFixed(1) + " rpm";
+            data += bluetoothStats.cadence.toFixed(1) + " rpm\n";
+            data += msToTime(duration);
             
             stats.innerText = data;
         }
     }
+
+    function msToTime(duration) {
+        var seconds = Math.floor((duration / 1000) % 60),
+          minutes = Math.floor((duration / (1000 * 60)) % 60),
+          hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+      
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+      
+        return hours + ":" + minutes + ":" + seconds;
+      }
     
     function diffForSample(current, previous, max) {
         if (current >= previous) {

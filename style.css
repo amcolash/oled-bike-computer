@@ -23,8 +23,8 @@ label {
 
 #connectButton {
   position: absolute;
-  top: 1.5em;
-  left: 1.5em;
+  top: 2em;
+  left: 2em;
 }
 
 #settings.hidden {
@@ -33,8 +33,8 @@ label {
 
 #settingsIcon {
   position: absolute;
-  top: 1.5em;
-  right: 1.5em;
+  top: 2em;
+  right: 2em;
 }
 
 .button {
