@@ -23,8 +23,8 @@ label {
 
 #connectButton {
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 1.5em;
+  left: 1.5em;
 }
 
 #settings.hidden {
@@ -33,13 +33,13 @@ label {
 
 #settingsIcon {
   position: absolute;
-  top: 1em;
-  right: 1em;
+  top: 1.5em;
+  right: 1.5em;
 }
 
 .button {
   color: white;
-  background-color: #1a1a1a;
+  background-color: #222;
   padding: 0.5em;
   line-height: 0.7em;
   border-radius: 0.5em;
@@ -48,7 +48,7 @@ label {
 
 #settings {
   position: absolute;
-  top: 1em;
+  top: 1.5em;
   transition: top 0.3s;
   line-height: 2em;
 }
@@ -60,11 +60,12 @@ label {
 
 #time {
   position: absolute;
-  bottom: 1em;
+  bottom: 2.25em;
   font-size: 2em;
 }
 
-#log {
-  padding: 1em;
-  margin: 1em;
+#battery {
+  position: absolute;
+  bottom: 1.5em;
+  font-size: 1.5em;
 }

@@ -34,7 +34,14 @@ window.onload = () => {
             scope: window.location.pathname.replace('/index.html', '/')
         });
     }
+
+    if (navigator.battery) {
+        setupBattery(navigator.battery);
+      } else if (navigator.getBattery) {
+        navigator.getBattery().then(setupBattery);
+      }
     
+    // Update clock every 5 seconds
     setIntervalImmediately(() => {
         // Got code from https://stackoverflow.com/questions/8888491/
         let date = new Date();
@@ -51,6 +58,13 @@ window.onload = () => {
 function setIntervalImmediately(callback, time) {
     callback();
     setInterval(callback, time);
+}
+
+function setupBattery(b) {
+    battery.innerHTML = (b.level * 100).toFixed(0) + '%';
+    b.addEventListener("levelchange", () => {
+        battery.innerHTML = (b.level * 100).toFixed(0) + '%';
+    });
 }
 
 function toggleSettings() {
