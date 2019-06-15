@@ -11,10 +11,40 @@ body {
   user-select: none;
 }
 
+input[type='checkbox'] {
+  position: relative;
+  top: -0.3em;
+  left: -0.4em;
+}
+
+input[type='checkbox']:after {
+  line-height: 1.15em;
+  content: '';
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid #E0E0E0;
+  background: black;
+  font-size: 1.25em;
+  border-radius: 0.25em;
+}
+
+input[type='checkbox']:checked:after {
+  content: '✔';
+  text-align: center;
+  color: white;
+}
+
+input[type='checkbox'] + label {
+  padding-left: 1em;
+}
+
 input, select {
   border-radius: 0.25em;
   padding: 0.25em;
-  background-color: white;
+  background-color: black;
+  color: white;
+  border: 2px solid #E0E0E0;
 }
 
 label {
