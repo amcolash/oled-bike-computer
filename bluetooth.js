@@ -21,7 +21,7 @@ window.onload = () => {
     updateWheel();
     feather.replace();
     
-    stats.innerText = metric.checked ? "0.0 km/hr\n0.00 km\n0.0 rpm" : "0.0 mi/hr\n0.00 mi\n0.0 rpm";
+    stats.innerText = metric.checked ? "0.0 km/hr\n0.00 km\n0.0 rpm\n00:00:00" : "0.0 mi/hr\n0.00 mi\n0.0 rpm\n00:00:00";
     
     if (simulate) {
         // call a few times and repeat so ui is updated immediately

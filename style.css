@@ -53,6 +53,10 @@ label {
   line-height: 2em;
 }
 
+#bluetoothInfo {
+  padding-bottom: 7em;
+}
+
 #stats {
   font-size: 3em;
   line-height: 1.5em;
