@@ -30,7 +30,7 @@ input[type='checkbox']:after {
 }
 
 input[type='checkbox']:checked:after {
-  content: '✔';
+  content: '✓';
   text-align: center;
   color: white;
 }
@@ -73,6 +73,10 @@ label {
   line-height: 0.7em;
   border-radius: 0.5em;
   cursor: pointer;
+}
+
+.button.disabled {
+  color: #a55;
 }
 
 #settings {

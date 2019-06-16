@@ -12,7 +12,8 @@ const serviceUuid = "cycling_speed_and_cadence";
 const characteristicUuid = "csc_measurement";
 
 var simulate = true, duration = 0;
-var characteristic, bluetoothDevice, previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize, lastUpdate;
+var previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize;
+var characteristic, bluetoothDevice, lastUpdate, wakeLock, wakeLockRequest;
 
 window.onload = () => {
     loadSettings();
@@ -28,7 +29,11 @@ window.onload = () => {
         handleNotifications();
         setIntervalImmediately(handleNotifications, 1000);
     }
-    
+
+    if (window.location.protocol != 'https:' && window.location.hostname !== 'localhost') {
+        connectButton.classList.add('disabled');
+    }
+
     if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('serviceWorker.js', {
             scope: window.location.pathname.replace('/index.html', '/')
@@ -37,9 +42,13 @@ window.onload = () => {
 
     if (navigator.battery) {
         setupBattery(navigator.battery);
-      } else if (navigator.getBattery) {
+    } else if (navigator.getBattery) {
         navigator.getBattery().then(setupBattery);
-      }
+    }
+
+    if (navigator.getWakeLock) {
+        navigator.getWakeLock('system').then(l => wakeLock = l);
+    }
     
     // Update clock every 5 seconds
     setIntervalImmediately(() => {
@@ -111,6 +120,10 @@ function handleButton() {
         cleanup();
         return;
     }
+
+    if (wakeLock && !wakeLock.active) {
+        wakeLockRequest = wakeLock.createRequest();
+    }
     
     console.log('Requesting Bluetooth Device...');
     navigator.bluetooth.requestDevice({filters: [{services: [serviceUuid]}]})
@@ -135,6 +148,11 @@ function cleanup() {
     if (bluetoothDevice) {
         bluetoothDevice.removeEventListener('gattserverdisconnected', onDisconnected);
         bluetoothDevice = undefined;
+    }
+
+    if (wakeLockRequest) {
+        wakeLockRequest.cancel();
+        wakeLockRequest = undefined;
     }
 
     lastUpdate = undefined;
