@@ -65,6 +65,7 @@ label {
   position: absolute;
   top: 2em;
   right: 2em;
+  z-index: 2;
 }
 
 .button {
@@ -84,10 +85,11 @@ label {
   top: 1.5em;
   transition: top 0.3s;
   line-height: 2em;
+  z-index: 2;
 }
 
 #bluetoothInfo {
-  padding-bottom: 7em;
+  padding-bottom: 6em;
 }
 
 #stats {
@@ -105,4 +107,20 @@ label {
   position: absolute;
   bottom: 1.5em;
   font-size: 1.5em;
+}
+
+#overlay {
+  z-index: 1;
+  background-color: black;
+  opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+#overlay.visible {
+  opacity: 0.85;
+  pointer-events: all;
 }

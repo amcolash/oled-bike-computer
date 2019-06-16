@@ -77,7 +77,8 @@ function setupBattery(b) {
 }
 
 function toggleSettings() {
-    settings.classList.toggle("hidden");
+    settings.classList.toggle('hidden');
+    overlay.classList.toggle('visible');
 }
 
 function loadSettings() {
