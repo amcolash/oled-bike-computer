@@ -11,7 +11,7 @@ const updateRatio = 0.85; // Percent ratio between old/new stats
 const serviceUuid = "cycling_speed_and_cadence";
 const characteristicUuid = "csc_measurement";
 
-var simulate = true, duration = 0;
+var simulate = false, duration = 0;
 var previousSample, currentSample, bluetoothStats, hasWheel, hasCrank, startDistance, wheelSize;
 var characteristic, bluetoothDevice, lastUpdate, wakeLock, wakeLockRequest;
 
@@ -237,17 +237,29 @@ function connect() {
         
         if (!simulate) {
             const value = event.target.value;
+            // console.log(value.buffer)
             
             const flags = value.getUint8(0, true);
             hasWheel = flags === 1 || flags === 3;
             hasCrank = flags === 2 || flags === 3;
-            
-            currentSample = {
-                wheel: value.getUint32(1, true),
-                wheelTime: value.getUint16(5, true),
-                crank: value.getUint16(7, true),
-                crankTime: value.getUint16(9, true),
-            };
+
+            currentSample = {}
+            if (hasWheel){
+                Object.assign(currentSample,{
+                    wheel: value.getUint32(1, true),
+                    wheelTime: value.getUint16(5, true)
+                })
+            }
+            if (hasCrank){
+                Object.assign(currentSample,{
+                    crank: value.getUint16(7, true),
+                    crankTime: value.getUint16(9, true)
+                })
+            }
+
+            console.log ( "wheelCumulative = " + currentSample.wheel+  " wheelTime " + currentSample.wheelTime )
+
+
         } else {
             hasWheel = true;
             hasCrank = true;
@@ -269,20 +281,27 @@ function connect() {
         calculateStats();
 
         if (bluetoothStats) {
-            if (bluetoothStats.speed > 0) {
-                if (!lastUpdate) lastUpdate = new Date();
-                duration += (new Date() - lastUpdate);
-                lastUpdate = new Date();
+            
+            if (hasWheel){
+                if (bluetoothStats.speed > 0) {
+                    if (!lastUpdate) lastUpdate = new Date();
+                    duration += (new Date() - lastUpdate);
+                    lastUpdate = new Date();
+                }
+
+                if (metric.checked) {
+                    data = bluetoothStats.speed.toFixed(1) + " km/hr\n";
+                    data += bluetoothStats.distance.toFixed(2) + " km\n";
+                } else {
+                    data = (bluetoothStats.speed * 0.621371).toFixed(1) + " mi/hr\n";
+                    data += (bluetoothStats.distance * 0.621371).toFixed(2) + " mi\n";
+                }
             }
 
-            if (metric.checked) {
-                data = bluetoothStats.speed.toFixed(1) + " km/hr\n";
-                data += bluetoothStats.distance.toFixed(2) + " km\n";
-            } else {
-                data = (bluetoothStats.speed * 0.621371).toFixed(1) + " mi/hr\n";
-                data += (bluetoothStats.distance * 0.621371).toFixed(2) + " mi\n";
+            if (hasCrank){
+                data += bluetoothStats.cadence.toFixed(1) + " rpm\n";
             }
-            data += bluetoothStats.cadence.toFixed(1) + " rpm\n";
+
             data += msToTime(duration);
             
             stats.innerText = data;
